@@ -1,0 +1,244 @@
+
+-- Create tables section -------------------------------------------------
+
+-- Table Tipo_usuario
+
+CREATE TABLE "Tipo_usuario"(
+ "id_tipoU" Bigint NOT NULL,
+ "Descripcion" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Tipo_usuario
+
+ALTER TABLE "Tipo_usuario" ADD CONSTRAINT "PK_Tipo_usuario" PRIMARY KEY ("id_tipoU")
+;
+
+-- Table Usuario
+
+CREATE TABLE "Usuario"(
+ "id_user" Bigint NOT NULL,
+ "Nombre" Bigint,
+ "Apellido" Bigint,
+ "Correo" Bigint,
+ "Contraseña" Bigint,
+ "Direccion" Bigint,
+ "Telefono" Bigint,
+ "Fecha_nacimiento" Bigint,
+ "id_tipoU" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Create indexes for table Usuario
+
+CREATE INDEX "IX_Relationship17" ON "Usuario" ("id_tipoU")
+;
+
+-- Add keys for table Usuario
+
+ALTER TABLE "Usuario" ADD CONSTRAINT "PK_Usuario" PRIMARY KEY ("id_user")
+;
+
+-- Table Asignacion
+
+CREATE TABLE "Asignacion"(
+ "id_horario" Bigint NOT NULL,
+ "id_user" Bigint NOT NULL,
+ "id_nivel" Bigint NOT NULL,
+ "id_master" Bigint NOT NULL
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Asignacion
+
+ALTER TABLE "Asignacion" ADD CONSTRAINT "PK_Asignacion" PRIMARY KEY ("id_horario","id_user","id_nivel","id_master")
+;
+
+-- Table Niveles
+
+CREATE TABLE "Niveles"(
+ "id_nivel" Bigint NOT NULL,
+ "nombre" Bigint,
+ "id_master" Bigint NOT NULL
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Niveles
+
+ALTER TABLE "Niveles" ADD CONSTRAINT "PK_Niveles" PRIMARY KEY ("id_nivel","id_master")
+;
+
+-- Table Horario
+
+CREATE TABLE "Horario"(
+ "id_horario" Bigint NOT NULL,
+ "Hora" Bigint,
+ "Día" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Horario
+
+ALTER TABLE "Horario" ADD CONSTRAINT "PK_Horario" PRIMARY KEY ("id_horario")
+;
+
+-- Table Docente
+
+CREATE TABLE "Docente"(
+ "id_master" Bigint NOT NULL,
+ "nombre" Bigint,
+ "Apellido" Bigint,
+ "Correo" Bigint,
+ "Contraseña" Bigint,
+ "Direccion" Bigint,
+ "Telefono" Bigint,
+ "Fecha_nacimiento" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Docente
+
+ALTER TABLE "Docente" ADD CONSTRAINT "PK_Docente" PRIMARY KEY ("id_master")
+;
+
+-- Table Estado
+
+CREATE TABLE "Estado"(
+ "id_user" Bigint NOT NULL
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Estado
+
+ALTER TABLE "Estado" ADD CONSTRAINT "PK_Estado" PRIMARY KEY ("id_user")
+;
+
+-- Table Consulta
+
+CREATE TABLE "Consulta"(
+ "id_consulta" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Table Pago
+
+CREATE TABLE "Pago"(
+ "id_pago" Bigint NOT NULL,
+ "Descuento" Bigint,
+ "Extra" Bigint,
+ "id:mensualidad" Bigint NOT NULL,
+ "id_user" Bigint,
+ "id_tipoP" Bigint,
+ "Total" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Create indexes for table Pago
+
+CREATE INDEX "IX_Relationship14" ON "Pago" ("id_user")
+;
+
+-- Add keys for table Pago
+
+ALTER TABLE "Pago" ADD CONSTRAINT "PK_Pago" PRIMARY KEY ("id_pago","id:mensualidad")
+;
+
+-- Table Tipo_pago
+
+CREATE TABLE "Tipo_pago"(
+ "id_tipoP" Bigint NOT NULL,
+ "Descripcion" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Tipo_pago
+
+ALTER TABLE "Tipo_pago" ADD CONSTRAINT "PK_Tipo_pago" PRIMARY KEY ("id_tipoP")
+;
+
+-- Table Abono
+
+CREATE TABLE "Abono"(
+ "id_abono" Bigint NOT NULL,
+ "Cantidad" Bigint,
+ "id_pago" Bigint NOT NULL,
+ "id:mensualidad" Bigint NOT NULL
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Abono
+
+ALTER TABLE "Abono" ADD CONSTRAINT "PK_Abono" PRIMARY KEY ("id_abono","id_pago","id:mensualidad")
+;
+
+-- Table Mensualidad
+
+CREATE TABLE "Mensualidad"(
+ "id:mensualidad" Bigint NOT NULL,
+ "Mes" Bigint
+)
+WITH (
+ autovacuum_enabled=true)
+;
+
+-- Add keys for table Mensualidad
+
+ALTER TABLE "Mensualidad" ADD CONSTRAINT "PK_Mensualidad" PRIMARY KEY ("id:mensualidad")
+;
+-- Create foreign keys (relationships) section ------------------------------------------------- 
+
+ALTER TABLE "Asignacion" ADD FOREIGN KEY ("id_horario") REFERENCES "Horario" ("id_horario") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Estado" ADD CONSTRAINT "Relationship11" FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Asignacion" ADD FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Niveles" ADD FOREIGN KEY ("id_master") REFERENCES "Docente" ("id_master") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Abono" ADD FOREIGN KEY ("id_pago", "id:mensualidad") REFERENCES "Pago" ("id_pago", "id:mensualidad") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Asignacion" ADD FOREIGN KEY ("id_nivel", "id_master") REFERENCES "Niveles" ("id_nivel", "id_master") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Pago" ADD FOREIGN KEY ("id:mensualidad") REFERENCES "Mensualidad" ("id:mensualidad") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Pago" ADD FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Pago" ADD FOREIGN KEY ("id_tipoP") REFERENCES "Tipo_pago" ("id_tipoP") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+ALTER TABLE "Usuario" ADD FOREIGN KEY ("id_tipoU") REFERENCES "Tipo_usuario" ("id_tipoU") ON DELETE NO ACTION ON UPDATE NO ACTION
+;
+
+
+
+
