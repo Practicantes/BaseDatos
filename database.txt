@@ -1,11 +1,18 @@
+/*
+Created: 19/09/2019
+Modified: 19/09/2019
+Model: PostgreSQL 10
+Database: PostgreSQL 10
+*/
+
 
 -- Create tables section -------------------------------------------------
 
 -- Table Tipo_usuario
 
 CREATE TABLE "Tipo_usuario"(
- "id_tipoU" Bigint NOT NULL,
- "Descripcion" Bigint
+ "id_tipoU" Integer NOT NULL,
+ "Descripcion" Character varying
 )
 WITH (
  autovacuum_enabled=true)
@@ -19,15 +26,15 @@ ALTER TABLE "Tipo_usuario" ADD CONSTRAINT "PK_Tipo_usuario" PRIMARY KEY ("id_tip
 -- Table Usuario
 
 CREATE TABLE "Usuario"(
- "id_user" Bigint NOT NULL,
- "Nombre" Bigint,
- "Apellido" Bigint,
- "Correo" Bigint,
- "Contraseña" Bigint,
- "Direccion" Bigint,
- "Telefono" Bigint,
- "Fecha_nacimiento" Bigint,
- "id_tipoU" Bigint
+ "id_user" Integer NOT NULL,
+ "Nombre" Character varying,
+ "Apellido" Character varying,
+ "Correo" Character varying,
+ "Contraseña" Character varying,
+ "Direccion" Character varying,
+ "Telefono" Character varying,
+ "Fecha_nacimiento" Date,
+ "id_tipoU" Integer
 )
 WITH (
  autovacuum_enabled=true)
@@ -46,10 +53,10 @@ ALTER TABLE "Usuario" ADD CONSTRAINT "PK_Usuario" PRIMARY KEY ("id_user")
 -- Table Asignacion
 
 CREATE TABLE "Asignacion"(
- "id_horario" Bigint NOT NULL,
- "id_user" Bigint NOT NULL,
- "id_nivel" Bigint NOT NULL,
- "id_master" Bigint NOT NULL
+ "id_horario" Integer NOT NULL,
+ "id_user" Integer NOT NULL,
+ "id_nivel" Integer NOT NULL,
+ "id_master" Integer NOT NULL
 )
 WITH (
  autovacuum_enabled=true)
@@ -63,9 +70,9 @@ ALTER TABLE "Asignacion" ADD CONSTRAINT "PK_Asignacion" PRIMARY KEY ("id_horario
 -- Table Niveles
 
 CREATE TABLE "Niveles"(
- "id_nivel" Bigint NOT NULL,
- "nombre" Bigint,
- "id_master" Bigint NOT NULL
+ "id_nivel" Integer NOT NULL,
+ "nombre" Character varying,
+ "id_master" Integer NOT NULL
 )
 WITH (
  autovacuum_enabled=true)
@@ -79,9 +86,9 @@ ALTER TABLE "Niveles" ADD CONSTRAINT "PK_Niveles" PRIMARY KEY ("id_nivel","id_ma
 -- Table Horario
 
 CREATE TABLE "Horario"(
- "id_horario" Bigint NOT NULL,
- "Hora" Bigint,
- "Día" Bigint
+ "id_horario" Integer NOT NULL,
+ "Hora" Character varying,
+ "Día" Character varying
 )
 WITH (
  autovacuum_enabled=true)
@@ -95,14 +102,14 @@ ALTER TABLE "Horario" ADD CONSTRAINT "PK_Horario" PRIMARY KEY ("id_horario")
 -- Table Docente
 
 CREATE TABLE "Docente"(
- "id_master" Bigint NOT NULL,
- "nombre" Bigint,
- "Apellido" Bigint,
- "Correo" Bigint,
- "Contraseña" Bigint,
- "Direccion" Bigint,
- "Telefono" Bigint,
- "Fecha_nacimiento" Bigint
+ "id_master" Integer NOT NULL,
+ "nombre" Character varying,
+ "Apellido" Character varying,
+ "Correo" Character varying,
+ "Contraseña" Character varying,
+ "Direccion" Character varying,
+ "Telefono" Character varying,
+ "Fecha_nacimiento" Date
 )
 WITH (
  autovacuum_enabled=true)
@@ -113,39 +120,16 @@ WITH (
 ALTER TABLE "Docente" ADD CONSTRAINT "PK_Docente" PRIMARY KEY ("id_master")
 ;
 
--- Table Estado
-
-CREATE TABLE "Estado"(
- "id_user" Bigint NOT NULL
-)
-WITH (
- autovacuum_enabled=true)
-;
-
--- Add keys for table Estado
-
-ALTER TABLE "Estado" ADD CONSTRAINT "PK_Estado" PRIMARY KEY ("id_user")
-;
-
--- Table Consulta
-
-CREATE TABLE "Consulta"(
- "id_consulta" Bigint
-)
-WITH (
- autovacuum_enabled=true)
-;
-
 -- Table Pago
 
 CREATE TABLE "Pago"(
- "id_pago" Bigint NOT NULL,
- "Descuento" Bigint,
- "Extra" Bigint,
- "id:mensualidad" Bigint NOT NULL,
- "id_user" Bigint,
- "id_tipoP" Bigint,
- "Total" Bigint
+ "id_pago" Integer NOT NULL,
+ "Descuento" Character varying,
+ "Extra" Character varying,
+ "id:mensualidad" Integer NOT NULL,
+ "id_user" Integer,
+ "id_tipoP" Integer,
+ "Total" Character varying
 )
 WITH (
  autovacuum_enabled=true)
@@ -164,8 +148,8 @@ ALTER TABLE "Pago" ADD CONSTRAINT "PK_Pago" PRIMARY KEY ("id_pago","id:mensualid
 -- Table Tipo_pago
 
 CREATE TABLE "Tipo_pago"(
- "id_tipoP" Bigint NOT NULL,
- "Descripcion" Bigint
+ "id_tipoP" Integer NOT NULL,
+ "Descripcion" Character varying
 )
 WITH (
  autovacuum_enabled=true)
@@ -179,10 +163,10 @@ ALTER TABLE "Tipo_pago" ADD CONSTRAINT "PK_Tipo_pago" PRIMARY KEY ("id_tipoP")
 -- Table Abono
 
 CREATE TABLE "Abono"(
- "id_abono" Bigint NOT NULL,
- "Cantidad" Bigint,
- "id_pago" Bigint NOT NULL,
- "id:mensualidad" Bigint NOT NULL
+ "id_abono" Integer NOT NULL,
+ "Cantidad" Character varying,
+ "id_pago" Integer NOT NULL,
+ "id:mensualidad" Integer NOT NULL
 )
 WITH (
  autovacuum_enabled=true)
@@ -196,8 +180,8 @@ ALTER TABLE "Abono" ADD CONSTRAINT "PK_Abono" PRIMARY KEY ("id_abono","id_pago",
 -- Table Mensualidad
 
 CREATE TABLE "Mensualidad"(
- "id:mensualidad" Bigint NOT NULL,
- "Mes" Bigint
+ "id_mensualidad" Integer NOT NULL,
+ "Mes" Character varying
 )
 WITH (
  autovacuum_enabled=true)
@@ -205,39 +189,37 @@ WITH (
 
 -- Add keys for table Mensualidad
 
-ALTER TABLE "Mensualidad" ADD CONSTRAINT "PK_Mensualidad" PRIMARY KEY ("id:mensualidad")
+ALTER TABLE "Mensualidad" ADD CONSTRAINT "PK_Mensualidad" PRIMARY KEY ("id_mensualidad")
 ;
 -- Create foreign keys (relationships) section ------------------------------------------------- 
 
-ALTER TABLE "Asignacion" ADD FOREIGN KEY ("id_horario") REFERENCES "Horario" ("id_horario") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Usuario" ADD CONSTRAINT "1" FOREIGN KEY ("id_tipoU") REFERENCES "Tipo_usuario" ("id_tipoU") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Estado" ADD CONSTRAINT "Relationship11" FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Pago" ADD CONSTRAINT "2" FOREIGN KEY ("id_tipoP") REFERENCES "Tipo_pago" ("id_tipoP") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Asignacion" ADD FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Pago" ADD CONSTRAINT "3" FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Niveles" ADD FOREIGN KEY ("id_master") REFERENCES "Docente" ("id_master") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Asignacion" ADD CONSTRAINT "4" FOREIGN KEY ("id_nivel", "id_master") REFERENCES "Niveles" ("id_nivel", "id_master") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Abono" ADD FOREIGN KEY ("id_pago", "id:mensualidad") REFERENCES "Pago" ("id_pago", "id:mensualidad") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Abono" ADD CONSTRAINT "5" FOREIGN KEY ("id_pago", "id:mensualidad") REFERENCES "Pago" ("id_pago", "id:mensualidad") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Asignacion" ADD FOREIGN KEY ("id_nivel", "id_master") REFERENCES "Niveles" ("id_nivel", "id_master") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Niveles" ADD CONSTRAINT "6" FOREIGN KEY ("id_master") REFERENCES "Docente" ("id_master") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Pago" ADD FOREIGN KEY ("id:mensualidad") REFERENCES "Mensualidad" ("id:mensualidad") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Asignacion" ADD CONSTRAINT "7" FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Pago" ADD FOREIGN KEY ("id_user") REFERENCES "Usuario" ("id_user") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Asignacion" ADD CONSTRAINT "8" FOREIGN KEY ("id_horario") REFERENCES "Horario" ("id_horario") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Pago" ADD FOREIGN KEY ("id_tipoP") REFERENCES "Tipo_pago" ("id_tipoP") ON DELETE NO ACTION ON UPDATE NO ACTION
+ALTER TABLE "Pago" ADD FOREIGN KEY ("id:mensualidad") REFERENCES "Mensualidad" ("id_mensualidad") ON DELETE NO ACTION ON UPDATE NO ACTION
 ;
 
-ALTER TABLE "Usuario" ADD FOREIGN KEY ("id_tipoU") REFERENCES "Tipo_usuario" ("id_tipoU") ON DELETE NO ACTION ON UPDATE NO ACTION
-;
 
 
 
